@@ -45,6 +45,13 @@ public class Animation extends ArrayList<SpriteImage> {
 	}
 	
 	/**
+	 * Adds a 'constant' image to this animation.
+	 */
+    public void add(ImageIcon img) {
+		this.add(new SpriteImage(img));
+	}
+	
+	/**
 	 * Test if this animation has the specified name.
 	 */
 	public boolean equals(String name){
