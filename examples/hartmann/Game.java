@@ -2,13 +2,13 @@ package hartmann;
 
 import java.awt.event.KeyEvent;
 
+import com.kilvish.core.Sprite;
 import com.kilvish.view.GamePane;
 import com.kilvish.view.GameWindow;
 
 public class Game extends GamePane {
 	
 	Hartmann h;
-	Crate c;
 	
 	public Game() {
 		super(800, 500);
@@ -18,9 +18,15 @@ public class Game extends GamePane {
 		h.setLocation(11, this.getHeight()-h.getHeight());
 		this.add(h);
 		
-		c = new Crate();
-		c.setLocation(300, this.getHeight()-c.getHeight());
+		Crate c = new Crate();
+		c.setLocation(this.getWidth()-c.getWidth(), 
+				      this.getHeight()-c.getHeight());
 		this.add(c);
+		
+		SmallCrate cs = new SmallCrate();
+		cs.setLocation(c.getX()-cs.getWidth()-100, 
+				       this.getHeight()-cs.getHeight());
+		this.add(cs);
 	}
 
 	public void update(){
@@ -33,10 +39,9 @@ public class Game extends GamePane {
 		} else
 			h.setCurrentAnimation("idle");
 		
-		
-		if(c.has(h))
+		Sprite c;
+		if((c=h.collidingWithSome("crate")) != null)
 			h.placeLeftOf(c, 0);
-		
 		
 		if(h.getX()<10)
 			this.shiftScreenBy(this.getWidth()-120, 0);
