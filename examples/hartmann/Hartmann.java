@@ -49,7 +49,7 @@ public class Hartmann extends Actor {
 	public Hartmann() {
 		super("hartmann");
 		
-		this.energy   = 100;
+		this.energy   = 1000;
 		this.goodness = 100;
 		
 		this.setHorizontalTextPosition(JLabel.CENTER);
@@ -62,7 +62,7 @@ public class Hartmann extends Actor {
 		this.setCurrentAnimation("idle");
 	}
 	
-	public void update(){/*
+	public void update(){
 		if(this.energy>60)
 			this.setForeground(Color.GREEN);
 		else if(this.energy>30)
@@ -70,8 +70,7 @@ public class Hartmann extends Actor {
 		else
 			this.setForeground(Color.RED);
 		
-		this.setText(""+this.energy);
-		*/
+		this.setText(""+(this.energy/10));
 	}
 
 }

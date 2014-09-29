@@ -18,7 +18,7 @@ public class SmallCrate extends Sprite {
 	}
 	
 	public SmallCrate() {
-		super("crate");
+		super("Scrate");
 		this.addImage(img);
 	}
 
