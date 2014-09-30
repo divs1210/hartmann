@@ -14,7 +14,7 @@ public class Game extends GamePane {
 	
 	public Game() {
 		super(800, 500);
-		this.setFPS(55);
+		this.setFPS(80);
 		this.setBackground(new Color(230, 230, 255));
 		
 		h = new Hartmann();
@@ -22,11 +22,11 @@ public class Game extends GamePane {
 		this.add(h);
 		
 		Tree t = new Tree(2);
-		t.setLocation(-10, this.getHeight()-t.getHeight()+5);
+		t.setLocation(this.getWidth()-60, this.getHeight()-t.getHeight()+5);
 		this.add(t);
 		
 		Crate c = new Crate();
-		c.setLocation(this.getWidth()-c.getWidth(), 
+		c.setLocation(this.getWidth()-c.getWidth()-200, 
 				      this.getHeight()-c.getHeight());
 		this.add(c);
 		
@@ -45,27 +45,52 @@ public class Game extends GamePane {
 		}else if(isKeyDown(KeyEvent.VK_LEFT)){
 			h.setCurrentAnimation("left");
 			h.moveBy(-2, 0);
-		} else
+		}else
 			h.setCurrentAnimation("idle");
 		//ii. powers
-		if(isKeyDown(KeyEvent.VK_S) && h.energy >= 1)
+		if(isKeyDown(KeyEvent.VK_S) && h.energy >= 1){
 			this.add(new Push(h));
-		else if(isKeyDown(KeyEvent.VK_A) && h.energy >= 1)
+			h.energy-=2;
+		}else if(isKeyDown(KeyEvent.VK_A) && h.energy >= 1){
 			this.add(new Pull(h));
+			h.energy-=1;
+		}else if(isKeyDown(KeyEvent.VK_SPACE) && h.energy >= 1){
+			h.setCurrentAnimation("Rjump");
+			h.moveBy(0, -2);
+			h.energy-=3;
+	    }
 		
 		//collisions
 		//i. with Hartmann
 		Sprite c;
 		if((c=h.collidingWithSome("crate")) != null){
+			if(h.isLeftTo(c,60))
+				h.placeLeftOf(c, 1);
+			else if(h.isRightTo(c))
+				h.placeRightOf(c, 1);
+			else if(h.isAbove(c)){
+				h.yvel=0;
+				h.placeAbove(c, 0);
+			}
+		}
+		if((c=h.collidingWithSome("Scrate")) != null){
 			if(h.isLeftTo(c))
-				h.placeLeftOf(c, 0);
-		}else if((c=h.collidingWithSome("Scrate")) != null){
-			if(h.isLeftTo(c))
-				h.placeLeftOf(c, 0);
+				h.placeLeftOf(c, 1);
+			else if(h.isRightTo(c))
+				h.placeRightOf(c, 1);
+			else if(h.isAbove(c)){
+				h.yvel=0;
+				h.placeAbove(c, 0);
+			}
 		}//b/w other stuff
 		for(Sprite sc: this.getSpritesCalled("Scrate")){
 			Sprite other = sc.collidingWithSome("crate");
-			if(other!=null) sc.placeLeftOf(other, 0);
+			if(other!=null){
+				if(sc.isLeftTo(other))
+					sc.placeLeftOf(other, 0);
+				else if(sc.isRightTo(other))
+					sc.placeRightOf(other, 1);
+			}
 		}
 		
 		//pan camera
